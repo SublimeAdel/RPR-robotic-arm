@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ESP32 Robot Control</title>
+    <style>
+      button {
+        margin: 5px;
+        padding: 10px;
+      }
+      input {
+        margin: 5px;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ESP32 Robot Control</h1>
+    <label for="stepIncrement">Step Increment (degrees/steps): </label>
+    <input type="number" id="stepIncrement" name="stepIncrement" value="20" />
+    <button onclick="updateStepIncrement()">Set Step Increment</button
+    ><br /><br />
+    <button onclick="sendCommand('prismatic', 'up')">Prismatic Up</button>
+    <button onclick="sendCommand('prismatic', 'down')">Prismatic Down</button
+    ><br />
+    <button onclick="sendCommand('rotation', 'cw')">Rotate CW</button>
+    <button onclick="sendCommand('rotation', 'ccw')">Rotate CCW</button><br />
+    <button onclick="sendCommand('arm', 'cw')">Arm Up</button>
+    <button onclick="sendCommand('arm', 'ccw')">Arm Down</button><br />
+    <button onclick="sendCommand('gripper', 'open')">Gripper Open</button>
+    <button onclick="sendCommand('gripper', 'close')">Gripper Close</button
+    ><br />
+    <script>
+      function sendCommand(motor, direction) {
+        var stepIncrement = document.getElementById("stepIncrement").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open(
+          "GET",
+          "/move?motor=" +
+            motor +
+            "&direction=" +
+            direction +
+            "&stepIncrement=" +
+            stepIncrement,
+          true
+        );
+        xhr.send();
+      }
+
+      function updateStepIncrement() {
+        var stepIncrement = document.getElementById("stepIncrement").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/move?updateStepIncrement=" + stepIncrement, true);
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
